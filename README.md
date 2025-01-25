@@ -1,1 +1,1 @@
-# Customer_Churn_Prediction
+# Customer Churn Prediction (Predict behavior to retain customers)
