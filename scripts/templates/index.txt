@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telco Customer Churn Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f2f2f2;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Telco Customer Churn Prediction</h1>
+    <form id="churnForm">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+
+        <label for="senior">Senior Citizen:</label>
+        <select id="senior" name="senior" required>
+            <option value="">Select</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+
+        <label for="partner">Partner:</label>
+        <select id="partner" name="partner" required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label for="dependents">Dependents:</label>
+        <select id="dependents" name="dependents" required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label for="tenure">Tenure (months):</label>
+        <input type="number" id="tenure" name="tenure" required>
+
+        <label for="monthlyCharges">Monthly Charges:</label>
+        <input type="number" step="0.01" id="monthlyCharges" name="monthlyCharges" required>
+
+        <label for="totalCharges">Total Charges:</label>
+        <input type="number" step="0.01" id="totalCharges" name="totalCharges" required>
+
+        <label for="contract">Contract Type:</label>
+        <select id="contract" name="contract" required>
+            <option value="">Select</option>
+            <option value="Month-to-month">Month-to-month</option>
+            <option value="One year">One year</option>
+            <option value="Two year">Two year</option>
+        </select>
+
+        <label for="paymentMethod">Payment Method:</label>
+        <select id="paymentMethod" name="paymentMethod" required>
+            <option value="">Select</option>
+            <option value="Electronic check">Electronic check</option>
+            <option value="Mailed check">Mailed check</option>
+            <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+            <option value="Credit card (automatic)">Credit card (automatic)</option>
+        </select>
+
+        <button type="button" id="predictBtn">Predict</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('predictBtn').addEventListener('click', async () => {
+            const formData = {
+                gender: document.getElementById('gender').value,
+                SeniorCitizen: parseInt(document.getElementById('senior').value), // 1 ou 0
+                Partner: document.getElementById('partner').value === 'Yes' ? 1 : 0,
+                Dependents: document.getElementById('dependents').value === 'Yes' ? 1 : 0,
+                tenure: parseInt(document.getElementById('tenure').value),
+                MonthlyCharges: parseFloat(document.getElementById('monthlyCharges').value),
+                TotalCharges: parseFloat(document.getElementById('totalCharges').value),
+                contract: document.getElementById('contract').value, // Texte brut
+                paymentMethod: document.getElementById('paymentMethod').value // Texte brut
+            };
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ features: formData }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const prediction = data.prediction === 1 ? 'Churn' : 'No Churn';
+                    document.getElementById('result').innerText = `Prediction: ${prediction}`;
+                } else {
+                    document.getElementById('result').innerText = 'Error: Unable to get prediction.';
+                }
+            } catch (error) {
+                document.getElementById('result').innerText = 'Error: Could not connect to the API.';
+            }
+        });
+    </script>
+</body>
+</html>
