@@ -4,10 +4,10 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# Charger le modèle
+# Upload the data
 model = joblib.load('models/churn_model.pkl')    
 
-# Colonnes utilisées par le modèle
+# Columns used in the model
 model_features = ['gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure', 
                   'PhoneService', 'InternetService', 'MonthlyCharges', 'TotalCharges']
 
@@ -17,22 +17,22 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    # Récupérer les données envoyées depuis le frontend
+    # Recovering data sent from the frontend
     data = request.json.get('features', {})
 
     try:
-        # Créer un DataFrame à partir des données envoyées
+        # Create a DataFrame from the data sent
         df = pd.DataFrame([data])
 
-        # Vérifier que toutes les colonnes nécessaires sont présentes
+        # Check that all necessary columns are present
         for col in model_features:
             if col not in df.columns:
                 return jsonify({'error': f'Missing feature: {col}'}), 400
 
-        # Faire la prédiction
+        # Prediction
         prediction = model.predict(df)
 
-        # Convertir la prédiction en un format compréhensible
+        # Convert the prediction into an understandable format
         result = 'Churn' if prediction[0] == 1 else 'No Churn'
         return jsonify({'prediction': result})
 
@@ -41,3 +41,4 @@ def predict():
 
 if __name__ == '__main__':
     app.run(debug=True)
+     
