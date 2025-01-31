@@ -23,6 +23,16 @@ Classification Report:
    macro avg       0.71      0.68      0.69      1409 
 weighted avg       0.77      0.78      0.77      1409 
 
+## How to Run
+1. Clone the repository.
+2. Install dependencies: "pip install -r app/requirements.txt".
+3. Run the Flask app: "python app/app.py".
+4. Access the app at : **http://127.0.0.1:5000/**.
+
+## Future Work
+- Improve model performance using hyperparameter tuning.
+- Add more features to the dataset.
+
 
 
 
