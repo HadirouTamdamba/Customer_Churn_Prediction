@@ -11,17 +11,9 @@ Predict whether a customer will churn (leave) a service based on their usage pat
 5. **Deployment**: Deploy the model using Flask and Azure Web Services.
 
 ## Results
-Accuracy: 0.7785663591199432
-
-Classification Report:
-               precision    recall  f1-score   support
-
-           0       0.82      0.89      0.86      1036 
-           1       0.61      0.46      0.53       373 
-
-    accuracy                           0.78      1409 
-   macro avg       0.71      0.68      0.69      1409 
-weighted avg       0.77      0.78      0.77      1409 
+Accuracy: 0.78
+Precision : 0.61
+F1-score : 0.53
 
 ## How to Run
 1. Clone the repository.
